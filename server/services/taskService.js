@@ -33,7 +33,14 @@ function addTask(task) {
 
 // Function to delete a task by ID
 function deleteTask(taskId) {
+    const index = tasks.findIndex(task => task.id === taskId);
 
+    if(index === -1) {
+        return {sucess: false, message: "Task not found"};
+    }
+
+    tasks.splice(index, 1);
+    return {sucess: true, message: "Task deleted successfully"};
 };
 
 // Export the functions so other files can use them
