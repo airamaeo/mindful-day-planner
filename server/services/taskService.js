@@ -36,19 +36,19 @@ function deleteTask(taskId) {
     const index = tasks.findIndex(task => task.id === taskId);
 
     if(index === -1) {
-        return {sucess: false, message: "Task not found"};
+        return {success: false, message: "Task not found"};
     }
 
     tasks.splice(index, 1);
-    return {sucess: true, message: "Task deleted successfully"};
+    return {success: true, message: "Task deleted successfully"};
 };
 
 // Function to edit an existing task
 function updateTask(id, updatedTask){
-    const index = tasks.findIndex(task => task.id === taskId);
+    const index = tasks.findIndex(task => task.id === id);
 
     if(index === -1) {
-        return {sucess: false, message: "Task not found"};
+        return {success: false, message: "Task not found"};
     }
 
     tasks[index] = {
