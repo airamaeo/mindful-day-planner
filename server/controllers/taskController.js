@@ -15,6 +15,9 @@ function deleteTask(req, res){
     return res.status(200).json({ message: result.message });
 }
 
+function updateTask(req, res){}
+
 module.exports = {
     deleteTask,
+    updateTask,
 };

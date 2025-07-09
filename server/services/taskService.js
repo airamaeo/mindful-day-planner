@@ -43,6 +43,22 @@ function deleteTask(taskId) {
     return {sucess: true, message: "Task deleted successfully"};
 };
 
+// Function to edit an existing task
+function updateTask(id, updatedTask){
+    const index = tasks.findIndex(task => task.id === taskId);
+
+    if(index === -1) {
+        return {sucess: false, message: "Task not found"};
+    }
+
+    tasks[index] = {
+        ...tasks[index],
+        ...updatedTask
+    }
+    
+    return {success: true, message: "Task updated successfully"};
+}
+
 // Export the functions so other files can use them
 module.exports = {
     getAllTasks,
