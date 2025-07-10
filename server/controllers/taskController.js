@@ -3,6 +3,23 @@
 // Communicates to the service file to get or change the data
 const taskService = require('../services/taskService');
 
+function addTask(req, res){
+    try {
+        const task = req.body;
+        console.log(task);
+        
+        if(!task){
+            return res.status(400).json({error: 'Task input is required'});
+        } 
+        const newTask = taskService.addTask(task);
+
+        return res.status(201).json(newTask);
+    } catch (error) {
+        console.error('Error in adding task:', error.message);
+        res.status(500).json({error: 'Failed to add task'});
+    }
+}
+
 function getAllTasks(req, res){
     const tasks = taskService.getAllTasks();
 
@@ -35,6 +52,7 @@ function updateTask(req, res){
 }
 
 module.exports = {
+    addTask,
     getAllTasks,
     deleteTask,
     updateTask,
