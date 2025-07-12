@@ -12,6 +12,7 @@ function App() {
         <Route path='/' element={<Home />}/>
         <Route path='/addTask' element={<AddTask />}/>
         <Route path='/calendar' element={<Calendar />}/>
+        <Route path='/settings' element={<Settings />}/>
       </Routes>
     </>
   )
