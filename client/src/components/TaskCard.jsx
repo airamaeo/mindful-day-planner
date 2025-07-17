@@ -1,9 +1,12 @@
-import React from "react"
+import React from 'react';
 
-export default function TaskCard(){
+export default function TaskCard({title, date, time, type}){
     return(
         <div className="taskcard-container">
-            <p>TODO: Displays title, time and type of task</p>
+            <h2>{title}</h2>
+            <p>Date: {date}</p>
+            <p>Time: {time}</p>
+            <p>TYpe: {type}</p>
         </div>
     )
 }

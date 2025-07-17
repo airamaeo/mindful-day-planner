@@ -12,14 +12,15 @@ function getAllTasks() {
 // Function to add a new task
 function addTask(task) {
     // To check for required fields
-    if (!task.title || !task.time || !task.type) {
-        throw new Error("Missing task details: title, time or type");
+    if (!task.title || !task.date || !task.time || !task.type) {
+        throw new Error("Missing task details: title, date, time or type");
     }
 
     // Create new task with a uniquee id 
     const newTask = {
         id: Date.now().toString(), 
         title: task.title,
+        date: task.date,
         time: task.time,
         type: task.type,
     };

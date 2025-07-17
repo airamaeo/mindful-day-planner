@@ -18,7 +18,7 @@ export default function Home(){
                 setLoading(false);
             })
             .catch((err) => {
-                setError('Unable to get task');
+                setError('Unable to get tasks');
                 setLoading(false);
             });
     }, []);
@@ -26,7 +26,18 @@ export default function Home(){
     return (
         <div className="home-container">
             <h2>Let's start planning!</h2>
-            <TaskCard />
+            {loading && <p>Loading...</p>}
+            {error && <p>{error}</p>}
+
+            {tasks.map(task => (
+                <TaskCard
+                    key={task.id}
+                    title={task.title}
+                    date={task.date}
+                    time={task.time}
+                    type={task.type} 
+                />
+            ))}
         </div>
     )
 }
