@@ -1,5 +1,6 @@
 import React from "react"
 import { useState } from "react";
+import axios from 'axios';
 
 export default function AddTask(){
     const [title, setTitle] = useState('');
@@ -14,6 +15,19 @@ export default function AddTask(){
             alert('Please enter the task details');
             return; 
         }
+
+        axios.post('/api/tasks', {
+            title,
+            date,
+            time,
+            type
+        })
+        .then(res => {
+            console.log('Tasks added successfully', res.data);
+        })
+        .catch(err => {
+            console.log('Error in adding task', err);
+        })
     }
 
     return(
