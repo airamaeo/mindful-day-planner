@@ -2,6 +2,9 @@ import React, { useState, useEffect} from "react";
 import axios from 'axios';
 import TaskCard from "../components/TaskCard";
 
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+
 export default function Home(){
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -73,6 +76,11 @@ export default function Home(){
 
     return (
         <div className="home-container">
+            <FullCalendar
+                plugins={[ dayGridPlugin ]}
+                initialView="dayGridMonth" 
+            />
+
             <h2>Let's start planning!</h2>
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
