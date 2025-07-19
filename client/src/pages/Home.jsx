@@ -6,6 +6,7 @@ export default function Home(){
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [feedbackMsg, setFeedbackMsg] = useState('');
 
     useEffect(() => {    
         setLoading(true);
@@ -23,6 +24,17 @@ export default function Home(){
             });
     }, []);
 
+    const handleDelete = (taskId) => {
+        axios.delete(`http://localhost:5000/api/tasks/${taskId}`)
+        .then(() => {
+            const updated = tasks.filter(t => t.id !== taskId);
+            setTasks(updated);
+            localStorage.setItem('favorites', JSON.stringify(updated));
+            setFeedbackMsg('Task Deleted');
+            setTimeout(() => setFeedbackMsg(''), 2000);
+        })
+    };
+
     return (
         <div className="home-container">
             <h2>Let's start planning!</h2>
@@ -32,12 +44,16 @@ export default function Home(){
             {tasks.map(task => (
                 <TaskCard
                     key={task.id}
+                    id={task.id}
                     title={task.title}
                     date={task.date}
                     time={task.time}
-                    type={task.type} 
+                    type={task.type}
+                    onDelete={handleDelete}
                 />
             ))}
+
+            {feedbackMsg && <p className="feedback-msg">{feedbackMsg}</p>}
         </div>
     )
 }
