@@ -5,6 +5,7 @@ import TaskCard from "../components/TaskCard";
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from "@fullcalendar/interaction"
+import { useRef } from "react";
 
 export default function Home(){
     const [tasks, setTasks] = useState([]);
@@ -16,6 +17,9 @@ export default function Home(){
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [type, setType] = useState('');
+
+    const [showForm, setShowForm] = useState(false);
+    const formRef = useRef(null);
 
     const backendUrl = 'http://localhost:5000/api/tasks';
 
@@ -75,15 +79,19 @@ export default function Home(){
             })
     };
 
-    const handleDateClick = (arg) => {
-        alert(arg.dateStr)
-    };
-
     const calendarEvents = tasks.map(task => ({
         id: task.id,
         title: task.title,
         start: `${task.date}T${task.time}`,
     }));
+
+    const handleDateClick = (arg) => {
+        alert(arg.dateStr);
+        setShowForm(true);
+        setTimeout(() => {
+            formRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+    };
 
     return (
         <div className="home-container">
@@ -100,37 +108,39 @@ export default function Home(){
             {feedbackMsg && <p className="feedback-msg">{feedbackMsg}</p>}
 
             {/* AddTask Form */}
-            <form onSubmit={handleSubmit} className="addtask-container">
-                <label>Task:</label>
-                <input 
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-                <br />
-                <label>Date:</label>
-                <input 
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                />
-                <br />
-                <label>Time:</label>
-                <input 
-                    type="time"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                />
-                <br />
-                <label>Type:</label>
-                <input 
-                    type="text"
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                />
-                <br />
-                <button type='submit' className='saveTask-Btn'>Save</button>
-            </form>
+            {showForm && (
+                <form onSubmit={handleSubmit} id="addtask-container" className="addtask-container" ref={formRef}>
+                    <label>Task:</label>
+                    <input 
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                    <br />
+                    <label>Date:</label>
+                    <input 
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                    />
+                    <br />
+                    <label>Time:</label>
+                    <input 
+                        type="time"
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
+                    />
+                    <br />
+                    <label>Type:</label>
+                    <input 
+                        type="text"
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
+                    />
+                    <br />
+                    <button type='submit' className='saveTask-Btn'>Save</button>
+                </form>
+            )}
 
             {/* Task List */}
             {tasks.map(task => (
