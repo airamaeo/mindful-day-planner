@@ -1,5 +1,6 @@
 import React from "react"
 import { useState } from "react";
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
 export default function AddTask(){
@@ -7,6 +8,7 @@ export default function AddTask(){
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [type, setType] = useState('');
+    const navigate = useNavigate();
     
     const handleSubmit = (event) => {
         event.preventDefault(); // Prevents default form submission
@@ -16,7 +18,7 @@ export default function AddTask(){
             return; 
         }
 
-        axios.post('/api/tasks', {
+        axios.post('http://localhost:5000/api/tasks', {
             title,
             date,
             time,
@@ -24,6 +26,7 @@ export default function AddTask(){
         })
         .then(res => {
             console.log('Tasks added successfully', res.data);
+            navigate('/');
         })
         .catch(err => {
             console.log('Error in adding task', err);
@@ -61,7 +64,7 @@ export default function AddTask(){
                     onChange={(e) => setType(e.target.value)}
                 />
                 <br />
-            <button type='submit' className='saveTask-Btn'>Save</button>
+                <button type='submit' className='saveTask-Btn'>Save</button>
             </form>
         </div>
     )

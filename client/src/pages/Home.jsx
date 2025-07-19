@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from "react";
 import axios from 'axios';
 import TaskCard from "../components/TaskCard";
+import { Link } from 'react-router-dom';
 
 export default function Home(){
     const [tasks, setTasks] = useState([]);
@@ -26,13 +27,13 @@ export default function Home(){
 
     const handleDelete = (taskId) => {
         axios.delete(`http://localhost:5000/api/tasks/${taskId}`)
-        .then(() => {
-            const updated = tasks.filter(t => t.id !== taskId);
-            setTasks(updated);
-            localStorage.setItem('favorites', JSON.stringify(updated));
-            setFeedbackMsg('Task Deleted');
-            setTimeout(() => setFeedbackMsg(''), 2000);
-        })
+            .then(() => {
+                const updated = tasks.filter(t => t.id !== taskId);
+                setTasks(updated);
+                localStorage.setItem('favorites', JSON.stringify(updated));
+                setFeedbackMsg('Task Deleted');
+                setTimeout(() => setFeedbackMsg(''), 2000);
+            })
     };
 
     return (
@@ -40,6 +41,8 @@ export default function Home(){
             <h2>Let's start planning!</h2>
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
+
+            <Link to="/tasks">Add a new task</Link>
 
             {tasks.map(task => (
                 <TaskCard
