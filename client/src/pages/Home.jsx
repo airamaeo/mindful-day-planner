@@ -4,6 +4,7 @@ import TaskCard from "../components/TaskCard";
 
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from "@fullcalendar/interaction"
 
 export default function Home(){
     const [tasks, setTasks] = useState([]);
@@ -74,11 +75,23 @@ export default function Home(){
             })
     };
 
+    const handleDateClick = (arg) => {
+        alert(arg.dateStr)
+    };
+
+    const calendarEvents = tasks.map(task => ({
+        id: task.id,
+        title: task.title,
+        start: `${task.date}T${task.time}`,
+    }));
+
     return (
         <div className="home-container">
             <FullCalendar
-                plugins={[ dayGridPlugin ]}
+                plugins={[ dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth" 
+                dateClick={handleDateClick}
+                events={calendarEvents}
             />
 
             <h2>Let's start planning!</h2>
