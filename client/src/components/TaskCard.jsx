@@ -6,7 +6,7 @@ export default function TaskCard({id, title, date, time, type, onDelete}){
             <h2>{title}</h2>
             <p>Date: {date}</p>
             <p>Time: {time}</p>
-            <p>TYpe: {type}</p>
+            <p>Type: {type}</p>
             <button onClick={() => onDelete(id)}>Delete Task</button>            
         </div>
     )
