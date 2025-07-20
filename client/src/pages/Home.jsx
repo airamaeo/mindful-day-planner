@@ -2,10 +2,7 @@ import React, { useState, useEffect} from "react";
 import axios from 'axios';
 import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
-
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from "@fullcalendar/interaction"
+import CalendarView from '../components/CalendarView';
 import { useRef } from "react";
 
 export default function Home(){
@@ -80,12 +77,6 @@ export default function Home(){
             })
     };
 
-    const calendarEvents = tasks.map(task => ({
-        id: task.id,
-        title: task.title,
-        start: `${task.date}T${task.time}`,
-    }));
-
     const handleDateClick = (arg) => {
         alert(arg.dateStr);
         setShowForm(true);
@@ -96,12 +87,7 @@ export default function Home(){
 
     return (
         <div className="home-container">
-            <FullCalendar
-                plugins={[ dayGridPlugin, interactionPlugin]}
-                initialView="dayGridMonth" 
-                dateClick={handleDateClick}
-                events={calendarEvents}
-            />
+            <CalendarView tasks={tasks} onDateClick={handleDateClick}/>
 
             <h2>Let's start planning!</h2>
             {loading && <p>Loading...</p>}
