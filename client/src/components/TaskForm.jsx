@@ -34,11 +34,20 @@ export default function TaskForm({
                 />
                 <br />
                 <label>Type:</label>
-                <input 
+                <select 
+                    name="type-options" 
+                    id="type-options"
                     type="text"
                     value={type}
                     onChange={(e) => setType(e.target.value)}
-                />
+                >
+                    <option value="">Select type</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Family">Family</option>
+                    <option value="Birthdays">Birthdays</option>
+                    <option value="Events">Events</option>
+                    <option value="Work">Work</option>
+                </select>
                 <br />
                 <button type='submit' className='saveTask-Btn'>Save</button>
             </form>
