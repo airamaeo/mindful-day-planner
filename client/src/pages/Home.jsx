@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from "react";
 import axios from 'axios';
-import TaskCard from "../components/TaskCard";
 import TaskForm from '../components/TaskForm';
+import TaskList from '../components/TaskList';
 
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -108,7 +108,7 @@ export default function Home(){
             {error && <p>{error}</p>}
             {feedbackMsg && <p className="feedback-msg">{feedbackMsg}</p>}
 
-            {/* AddTask Form */}
+            {/* Task Form */}
             {showForm && (
                 <TaskForm
                     title={title}
@@ -125,17 +125,7 @@ export default function Home(){
             )}
 
             {/* Task List */}
-            {tasks.map(task => (
-                <TaskCard
-                    key={task.id}
-                    id={task.id}
-                    title={task.title}
-                    date={task.date}
-                    time={task.time}
-                    type={task.type}
-                    onDelete={handleDelete}
-                />
-            ))}
+            <TaskList tasks={tasks} onDelete={handleDelete}/>
         </div>
     )
 }
