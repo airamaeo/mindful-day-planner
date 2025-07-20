@@ -1,4 +1,5 @@
 import React from "react";
+import '../styles/TaskForm.css';
 
 export default function TaskForm({
     title, setTitle,
