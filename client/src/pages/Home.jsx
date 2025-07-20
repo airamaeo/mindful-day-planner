@@ -78,7 +78,9 @@ export default function Home(){
     };
 
     const handleDateClick = (arg) => {
-        alert(arg.dateStr);
+        const selectedDate = arg.dateStr;
+        console.log('Date selected: ', selectedDate);
+        setDate(selectedDate);
         setShowForm(true);
         setTimeout(() => {
             formRef.current?.scrollIntoView({ behavior: 'smooth' });
