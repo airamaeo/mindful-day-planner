@@ -6,7 +6,8 @@ export default function TaskForm({
     time, setTime,
     type, setType,
     handleSubmit,
-    formRef
+    formRef,
+    formError
 }){
 
     return(
@@ -49,8 +50,10 @@ export default function TaskForm({
                     <option value="Work">Work</option>
                 </select>
                 <br />
+                {formError && <p className="form-error">{formError}</p>}
                 <button type='submit' className='saveTask-Btn'>Save</button>
             </form>
+
         </div>
     )
 }

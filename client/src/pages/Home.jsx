@@ -17,6 +17,7 @@ export default function Home(){
     const [type, setType] = useState('');
 
     const [showForm, setShowForm] = useState(false);
+    const [formError, setFormError] = useState('');
     const formRef = useRef(null);
 
     const backendUrl = 'http://localhost:5000/api/tasks';
@@ -42,9 +43,10 @@ export default function Home(){
     const handleSubmit = (event) => {
         event.preventDefault();
         if(!title || !date || !time || !type){
-            alert('Please add task details');
+            setFormError('Please add task details');
             return;
         }
+        setFormError("");
 
         axios.post(backendUrl, {
             title,
@@ -117,6 +119,7 @@ export default function Home(){
                     setType={setType}
                     handleSubmit={handleSubmit}
                     formRef={formRef}
+                    formError={formError}
                 />
             )}
 
