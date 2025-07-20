@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from "react";
 import axios from 'axios';
 import TaskCard from "../components/TaskCard";
+import TaskForm from '../components/TaskForm';
 
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -109,37 +110,18 @@ export default function Home(){
 
             {/* AddTask Form */}
             {showForm && (
-                <form onSubmit={handleSubmit} id="addtask-container" className="addtask-container" ref={formRef}>
-                    <label>Task:</label>
-                    <input 
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                    <br />
-                    <label>Date:</label>
-                    <input 
-                        type="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                    />
-                    <br />
-                    <label>Time:</label>
-                    <input 
-                        type="time"
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                    />
-                    <br />
-                    <label>Type:</label>
-                    <input 
-                        type="text"
-                        value={type}
-                        onChange={(e) => setType(e.target.value)}
-                    />
-                    <br />
-                    <button type='submit' className='saveTask-Btn'>Save</button>
-                </form>
+                <TaskForm
+                    title={title}
+                    setTitle={setTitle}
+                    date={date}
+                    setDate={setDate}
+                    time={time}
+                    setTime={setTime}
+                    type={type}
+                    setType={setType}
+                    handleSubmit={handleSubmit}
+                    formRef={formRef}
+                />
             )}
 
             {/* Task List */}
