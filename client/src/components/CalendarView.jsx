@@ -3,12 +3,23 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import '../styles/CalendarView.css';
 
 export default function CalendarView({tasks, onDateClick}){
+    const typeColorMap = {
+        Personal: 'pink',
+        Family: 'blue',
+        Birthdays: 'green',
+        Events: 'orange',
+        Work: 'red',
+    };
+    
     const calendarEvents = tasks.map(task => ({
         id: task.id,
         title: task.title,
         start: `${task.date}T${task.time}`,
+        backgroundColor: typeColorMap[task.type],
+        className: `event-${task.type.toLowerCase()}`
     }));
 
     return(
