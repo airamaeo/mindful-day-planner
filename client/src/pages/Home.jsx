@@ -78,9 +78,17 @@ export default function Home(){
     };
 
     const handleDateClick = (arg) => {
-        const selectedDate = arg.dateStr;
-        console.log('Date selected: ', selectedDate);
-        setDate(selectedDate);
+        const dateTime = new Date(arg.dateStr);
+
+        const isoDate = dateTime.toISOString().split('T')[0];
+        const timePart = dateTime.toTimeString().split(':');
+        const isoTime = `${timePart[0]}:${timePart[1]}`;
+
+        console.log('Date selected: ', isoDate);
+        console.log('Time selected: ', isoTime);
+
+        setDate(isoDate);
+        setTime(isoTime);
         setShowForm(true);
         setTimeout(() => {
             formRef.current?.scrollIntoView({ behavior: 'smooth' });
