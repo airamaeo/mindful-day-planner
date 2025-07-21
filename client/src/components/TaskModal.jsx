@@ -9,7 +9,7 @@ export default function TaskModal({onClose, open, children}){
     return (
         <div className="taskModal-overlay" onClick={onClose}>
             <div 
-                className="modal-content"
+                className="taskModal-content"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button className="modal-close-btn" onClick={onClose}>
