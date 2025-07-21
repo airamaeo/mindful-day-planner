@@ -3,7 +3,7 @@
 }
 
 .event-family {
-    background-color: rgb(44, 68, 174);
+    background-color: rgba(110, 137, 255, 0.575);
 }
 
 .event-birthdays {
@@ -15,5 +15,5 @@
 }
 
 .event-work {
-    background-color: rgb(217, 30, 30);
+    background-color: rgba(255, 88, 88, 0.593);
 }

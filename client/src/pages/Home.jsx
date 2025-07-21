@@ -21,6 +21,8 @@ export default function Home(){
     const [formError, setFormError] = useState('');
     const formRef = useRef(null);
 
+    const [open, setOpen] = useState(false);
+
     const backendUrl = 'http://localhost:5000/api/tasks';
 
     useEffect(() => {
@@ -98,6 +100,14 @@ export default function Home(){
         }, 100);
     };
 
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
         <div className="home-container">
             <CalendarView tasks={tasks} onDateClick={handleDateClick}/>
@@ -109,19 +119,24 @@ export default function Home(){
 
             {/* Task Form */}
             {showForm && (
-                <TaskForm
-                    title={title}
-                    setTitle={setTitle}
-                    date={date}
-                    setDate={setDate}
-                    time={time}
-                    setTime={setTime}
-                    type={type}
-                    setType={setType}
-                    handleSubmit={handleSubmit}
-                    formRef={formRef}
-                    formError={formError}
-                />
+                <TaskModal 
+                    open={showForm}
+                    onClose={() => setShowForm(false)}
+                >
+                    <TaskForm
+                        title={title}
+                        setTitle={setTitle}
+                        date={date}
+                        setDate={setDate}
+                        time={time}
+                        setTime={setTime}
+                        type={type}
+                        setType={setType}
+                        handleSubmit={handleSubmit}
+                        formRef={formRef}
+                        formError={formError}
+                    />
+                </TaskModal>
             )}
 
             {/* Task List */}
