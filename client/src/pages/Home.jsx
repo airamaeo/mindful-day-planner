@@ -65,6 +65,7 @@ export default function Home(){
                 setType('');
                 setFeedbackMsg('Task Added');
                 setTimeout(() => setFeedbackMsg(''), 2000);
+                setShowForm(false);
             })
             .catch((err) => {
                 setError('Error in adding tasks');

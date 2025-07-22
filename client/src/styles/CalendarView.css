@@ -1,5 +1,5 @@
 .event-personal {
-    background-color: rgb(225, 140, 209);
+    background-color: rgba(225, 140, 209, 0.762);
 }
 
 .event-family {
@@ -7,11 +7,11 @@
 }
 
 .event-birthdays {
-    background-color: rgb(49, 139, 37);
+    background-color: rgba(49, 139, 37, 0.485);
 }
 
 .event-events {
-    background-color: rgb(244, 186, 38);
+    background-color: rgba(244, 186, 38, 0.557);
 }
 
 .event-work {
