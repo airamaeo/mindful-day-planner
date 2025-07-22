@@ -21,8 +21,6 @@ export default function Home(){
     const [formError, setFormError] = useState('');
     const formRef = useRef(null);
 
-    const [open, setOpen] = useState(false);
-
     const backendUrl = 'http://localhost:5000/api/tasks';
 
     useEffect(() => {
@@ -99,14 +97,6 @@ export default function Home(){
         setTimeout(() => {
             formRef.current?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
-    };
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
     };
 
     return (
