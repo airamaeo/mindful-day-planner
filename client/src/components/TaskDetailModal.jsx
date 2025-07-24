@@ -1,4 +1,5 @@
 import React, {useEffect} from "react"
+import '../styles/TaskDetailModal.css';
 
 export default function TaskDetailModal({task, onClose}){    
     if(!task) {
