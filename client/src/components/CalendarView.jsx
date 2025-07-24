@@ -5,7 +5,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import '../styles/CalendarView.css';
 
-export default function CalendarView({tasks, onDateClick}){
+export default function CalendarView({tasks, onDateClick, onTaskClick}){
     const typeColorMap = {
         Personal: 'pink',
         Family: 'blue',
@@ -38,6 +38,13 @@ export default function CalendarView({tasks, onDateClick}){
                 slotMaxTime="24:00:00"
                 nowIndicator={true}
                 height="auto"
+                eventClick={(info) => {
+                    const taskId = info.event.id; 
+                    const task = tasks.find(t => t.id === taskId);
+                    if (task && onTaskClick) {
+                        return onTaskClick(task)
+                    };
+                }}
             />
         </div>
     )

@@ -5,12 +5,15 @@ import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
 import CalendarView from '../components/CalendarView';
 import { useRef } from "react";
+import TaskDetailModal from "../components/TaskDetailModal";
 
 export default function Home(){
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [feedbackMsg, setFeedbackMsg] = useState('');
+
+    const [selectedTasks, setSelectedTasks] = useState(null);
 
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
@@ -101,7 +104,11 @@ export default function Home(){
 
     return (
         <div className="home-container">
-            <CalendarView tasks={tasks} onDateClick={handleDateClick}/>
+            <CalendarView 
+                tasks={tasks} 
+                onDateClick={handleDateClick}
+                onTaskClick={(task) => setSelectedTasks(task)}
+            />
 
             <h2>Let's start planning!</h2>
             {loading && <p>Loading...</p>}
@@ -131,7 +138,12 @@ export default function Home(){
             )}
 
             {/* Task List */}
-            <TaskList tasks={tasks} onDelete={handleDelete}/>
+            {selectedTasks && (
+                <TaskDetailModal 
+                    task={selectedTasks} 
+                    onClose={() => setSelectedTasks(null)}
+                />
+            )}
         </div>
     )
 }
