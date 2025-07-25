@@ -1,11 +1,10 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import TaskModal from "../components/TaskModal";
 import TaskForm from '../components/TaskForm';
-import TaskList from '../components/TaskList';
-import CalendarView from '../components/CalendarView';
-import { useRef } from "react";
 import TaskDetailModal from "../components/TaskDetailModal";
+// import TaskList from '../components/TaskList';
+import CalendarView from '../components/CalendarView';
 
 export default function Home(){
     const [tasks, setTasks] = useState([]);
@@ -14,15 +13,14 @@ export default function Home(){
     const [feedbackMsg, setFeedbackMsg] = useState('');
 
     const [selectedTasks, setSelectedTasks] = useState(null);
+    const [showForm, setShowForm] = useState(false);
+    const [formError, setFormError] = useState('');
+    const formRef = useRef(null);
 
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [type, setType] = useState('');
-
-    const [showForm, setShowForm] = useState(false);
-    const [formError, setFormError] = useState('');
-    const formRef = useRef(null);
 
     const backendUrl = 'http://localhost:5000/api/tasks';
 
@@ -73,20 +71,19 @@ export default function Home(){
             });
     }
 
-    const handleDelete = (taskId) => {
-        axios.delete(`http://localhost:5000/api/tasks/${taskId}`)
-            .then(() => {
-                const updated = tasks.filter(t => t.id !== taskId);
-                setTasks(updated);
-                localStorage.setItem('favorites', JSON.stringify(updated));
-                setFeedbackMsg('Task Deleted');
-                setTimeout(() => setFeedbackMsg(''), 2000);
-            })
-    };
+    // const handleDelete = (taskId) => {
+    //     axios.delete(`http://localhost:5000/api/tasks/${taskId}`)
+    //         .then(() => {
+    //             const updated = tasks.filter(t => t.id !== taskId);
+    //             setTasks(updated);
+    //             localStorage.setItem('favorites', JSON.stringify(updated));
+    //             setFeedbackMsg('Task Deleted');
+    //             setTimeout(() => setFeedbackMsg(''), 2000);
+    //         })
+    // };
 
     const handleDateClick = (arg) => {
         const dateTime = new Date(arg.dateStr);
-
         const isoDate = dateTime.toISOString().split('T')[0];
         const timePart = dateTime.toTimeString().split(':');
         const isoTime = `${timePart[0]}:${timePart[1]}`;
@@ -137,7 +134,7 @@ export default function Home(){
                 </TaskModal>
             )}
 
-            {/* Task List */}
+            {/* Task Details Modal */}
             {selectedTasks && (
                 <TaskDetailModal 
                     task={selectedTasks} 

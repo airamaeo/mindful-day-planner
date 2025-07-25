@@ -24,7 +24,7 @@ export default function TaskModal({onClose, open, children}){
                 className="taskModal-content"
                 onClick={(e) => e.stopPropagation()}
             >
-                <button className="modal-close-btn" onClick={onClose}>
+                <button className="taskModal-close-btn" onClick={onClose}>
                     X
                 </button>
                 {children}
