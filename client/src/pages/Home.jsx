@@ -16,6 +16,7 @@ export default function Home(){
     const [showForm, setShowForm] = useState(false);
     const [formError, setFormError] = useState('');
     const formRef = useRef(null);
+    const [editingTask, setEditingTask] = useState(null);
 
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
