@@ -1,9 +1,9 @@
 import React, {useEffect} from "react"
 import '../styles/TaskDetailModal.css';
 
-export default function TaskDetailModal({task, onClose, onEdit}){    
+export default function TaskDetailModal({task, onClose, onEdit, handleDelete}){    
     if(!task) {
-        return null;
+        return;
     };
 
     useEffect(() => {
@@ -34,6 +34,10 @@ export default function TaskDetailModal({task, onClose, onEdit}){
 
                 <button className="taskDetail-edit-btn" onClick={() => onEdit(task)}>
                     edit
+                </button>
+
+                <button className="taskDetail-delete-btn" onClick={() => handleDelete(task.id)}>
+                    delete
                 </button>
             </div>
         </div>

@@ -73,16 +73,22 @@ export default function Home(){
     };
     
 
-    // const handleDelete = (taskId) => {
-    //     axios.delete(`http://localhost:5000/api/tasks/${taskId}`)
-    //         .then(() => {
-    //             const updated = tasks.filter(t => t.id !== taskId);
-    //             setTasks(updated);
-    //             localStorage.setItem('favorites', JSON.stringify(updated));
-    //             setFeedbackMsg('Task Deleted');
-    //             setTimeout(() => setFeedbackMsg(''), 2000);
-    //         })
-    // };
+    const handleDelete = async (taskId) => {
+        try {
+            await axios.delete(`${backendUrl}/${taskId}`);
+
+            const updatedTasks = tasks.filter(task => task.id !== taskId);
+            setTasks(updatedTasks);
+
+            localStorage.setItem('favorites', JSON.stringify(updatedTasks));
+            setFeedbackMsg('Task deleted');
+            setTimeout(() => setFeedbackMsg(''), 2000);
+        } catch (err) {
+            console.error('Failed to delete task: ', err);
+            setFeedbackMsg('Failed to delete task');
+            setTimeout(() => setFeedbackMsg(''), 2000);
+        }
+    };
 
     function handleDateClick(arg) {
         const dateTime = new Date(arg.dateStr);
@@ -171,6 +177,7 @@ export default function Home(){
                     task={selectedTasks} 
                     onClose={() => setSelectedTasks(null)}
                     onEdit={handleEditClick}
+                    handleDelete={handleDelete}
                 />
             )}
         </div>
