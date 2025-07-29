@@ -82,6 +82,8 @@ export default function Home(){
 
             localStorage.setItem('favorites', JSON.stringify(updatedTasks));
             setFeedbackMsg('Task deleted');
+            setSelectedTasks(null);
+
             setTimeout(() => setFeedbackMsg(''), 2000);
         } catch (err) {
             console.error('Failed to delete task: ', err);
