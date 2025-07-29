@@ -1,7 +1,7 @@
 import React, {useEffect} from "react"
 import '../styles/TaskDetailModal.css';
 
-export default function TaskDetailModal({task, onClose}){    
+export default function TaskDetailModal({task, onClose, onEdit}){    
     if(!task) {
         return null;
     };
@@ -31,6 +31,10 @@ export default function TaskDetailModal({task, onClose}){
                 <p>{task.date}</p>
                 <p>{task.time}</p>
                 <p>{task.type}</p>
+
+                <button className="taskDetail-edit-btn" onClick={() => onEdit(task)}>
+                    edit
+                </button>
             </div>
         </div>
     )

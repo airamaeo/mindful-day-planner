@@ -100,12 +100,26 @@ export default function Home(){
         }, 100);
     };
 
+    const handleTaskClick = (task) => {
+        setSelectedTasks(task);
+    };
+
+    const handleEditClick = (task) => {
+        setSelectedTasks(null);
+        setEditingTask(task);
+        setTitle(task.title);
+        setDate(task.date);
+        setTime(task.time);
+        setType(task.type);
+        setShowForm(true);
+    };
+
     return (
         <div className="home-container">
             <CalendarView 
                 tasks={tasks} 
                 onDateClick={handleDateClick}
-                onTaskClick={(task) => setSelectedTasks(task)}
+                onTaskClick={handleTaskClick}
             />
 
             <h2>Let's start planning!</h2>
@@ -117,7 +131,11 @@ export default function Home(){
             {showForm && (
                 <TaskModal 
                     open={showForm}
-                    onClose={() => setShowForm(false)}
+                    onClose={() => {
+                        setShowForm(false);
+                        setEditingTask(null);
+                    }}
+                    task={editingTask}
                 >
                     <TaskForm
                         title={title}
@@ -140,6 +158,7 @@ export default function Home(){
                 <TaskDetailModal 
                     task={selectedTasks} 
                     onClose={() => setSelectedTasks(null)}
+                    onEdit={handleEditClick}
                 />
             )}
         </div>
