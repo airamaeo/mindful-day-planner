@@ -43,34 +43,47 @@ export default function Home(){
             });
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if(!title || !date || !time || !type){
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        if (!title || !date || !time || !type) {
             setFormError('Please add task details');
             return;
         }
-        setFormError("");
-
-        axios.post(backendUrl, {
-            title,
-            date,
-            time,
-            type
-        })
-            .then((res) => {
-                setTasks([...tasks, res.data]);
-                setTitle('');
-                setDate('');
-                setTime('');
-                setType('');
-                setFeedbackMsg('Task Added');
-                setTimeout(() => setFeedbackMsg(''), 2000);
-                setShowForm(false);
-            })
-            .catch((err) => {
-                setError('Error in adding tasks');
-            });
-    }
+    
+        try {
+            if (editingTask) {
+                const taskId = editingTask.id;
+    
+                const updatedTaskData = { title, date, time, type };
+    
+                const response = await axios.put(
+                    `${backendUrl}/${taskId}`, 
+                    updatedTaskData
+                );
+    
+                const updated = tasks.map(task =>
+                    task.id === taskId ? { ...task, ...updatedTaskData } : task
+                );
+                setTasks(updated);
+            } else {
+                const taskData = { title, date, time, type };
+    
+                const response = await axios.post(
+                    backendUrl,
+                    taskData
+                );
+    
+                setTasks([...tasks, response.data]);
+            }
+    
+            resetForm();
+        } catch (err) {
+            console.error(err);
+            setFormError("Something went wrong");
+        }
+    };
+    
 
     // const handleDelete = (taskId) => {
     //     axios.delete(`http://localhost:5000/api/tasks/${taskId}`)
@@ -83,7 +96,7 @@ export default function Home(){
     //         })
     // };
 
-    const handleDateClick = (arg) => {
+    function handleDateClick(arg) {
         const dateTime = new Date(arg.dateStr);
         const isoDate = dateTime.toISOString().split('T')[0];
         const timePart = dateTime.toTimeString().split(':');
@@ -98,7 +111,7 @@ export default function Home(){
         setTimeout(() => {
             formRef.current?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
-    };
+    }
 
     const handleTaskClick = (task) => {
         setSelectedTasks(task);
@@ -112,6 +125,16 @@ export default function Home(){
         setTime(task.time);
         setType(task.type);
         setShowForm(true);
+    };
+
+    const resetForm = () => {
+        setTitle('');
+        setDate('');
+        setTime('');
+        setType('');
+        setFormError('');
+        setEditingTask(null);
+        setShowForm(false);
     };
 
     return (
