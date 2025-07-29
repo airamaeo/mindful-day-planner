@@ -3,7 +3,6 @@ import axios from 'axios';
 import TaskModal from "../components/TaskModal";
 import TaskForm from '../components/TaskForm';
 import TaskDetailModal from "../components/TaskDetailModal";
-// import TaskList from '../components/TaskList';
 import CalendarView from '../components/CalendarView';
 
 export default function Home(){
@@ -54,29 +53,18 @@ export default function Home(){
         try {
             if (editingTask) {
                 const taskId = editingTask.id;
-    
                 const updatedTaskData = { title, date, time, type };
     
-                const response = await axios.put(
-                    `${backendUrl}/${taskId}`, 
-                    updatedTaskData
-                );
+                await axios.put(`${backendUrl}/${taskId}`, updatedTaskData);
     
-                const updated = tasks.map(task =>
+                setTasks(tasks.map(task =>
                     task.id === taskId ? { ...task, ...updatedTaskData } : task
-                );
-                setTasks(updated);
+                ));
             } else {
                 const taskData = { title, date, time, type };
-    
-                const response = await axios.post(
-                    backendUrl,
-                    taskData
-                );
-    
+                const response = await axios.post(backendUrl,taskData);
                 setTasks([...tasks, response.data]);
             }
-    
             resetForm();
         } catch (err) {
             console.error(err);
@@ -108,6 +96,7 @@ export default function Home(){
         setDate(isoDate);
         setTime(isoTime);
         setShowForm(true);
+
         setTimeout(() => {
             formRef.current?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
@@ -185,5 +174,5 @@ export default function Home(){
                 />
             )}
         </div>
-    )
+    );
 }
