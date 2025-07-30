@@ -37,9 +37,23 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    margin-top: 1rem;
+    margin: 1rem;
 }
 
 .taskDetail-edit-btn:hover {
+    background-color: #0056b3;
+}
+
+.taskDetail-delete-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 1rem;
+}
+
+.taskDetail-delete-btn:hover {
     background-color: #0056b3;
 }
