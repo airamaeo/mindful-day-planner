@@ -23,6 +23,8 @@ function addTask(task) {
         date: task.date,
         time: task.time,
         type: task.type,
+        recurrence: task.recurrence || null,
+        daysOfWeek: task.daysOfWeek || [],
     };
 
     // Add to tasks array
@@ -60,10 +62,82 @@ function updateTask(id, updatedTask){
     return {success: true, message: "Task updated successfully"};
 }
 
+// Function to generate recurring tasks/ events
+function generateRecurringTasks(tasks){
+    const recurringTasks = [];
+    const { recurrence, daysOfWeek, date, title, time, type } = task;
+
+    let newDate = new Date(date);
+
+    // Generating tasks for daily occurence
+    if(recurrence === 'daily'){
+        for(let i = 1; i <= 30; i++){
+            const taskDate = new Date(newDate);
+            taskDate.setDate(newDate.getDate() + 1);
+
+            recurringTasks.push({
+                title,
+                date: taskDate.toISOString().split('T')[0],
+                time,
+                type,
+                recurrence,
+            });
+        }
+    };
+
+    // Generating tasks for weekly occurence
+    if(recurrence === 'weekly'){
+        for(let i = 1; i <= 12; i++){
+            daysOfWeek.forEach((dayIndex) => {
+                const nextDate = getNextWeekday(newDate, dayIndex);
+
+                recurringTasks.push({
+                    title,
+                    date: nextDate.toISOString().split('T')[0],
+                    time,
+                    type,
+                    recurrence,
+                });
+            });
+            newDate.setDate(newDate.getDate() + 7);
+        }
+    };    
+
+    // Generating tasks for monthly occurence
+    if(recurrence === 'monthly'){
+        for(let i = 1; i <= 12; i++){
+            const taskDate = new Date(newDate);
+            taskDate.setMonth(newDate.getMonth() + i);
+            
+            recurringTasks.push({
+                title,
+                date: taskDate.toISOString().split('T')[0],
+                time,
+                type,
+                recurrence,
+            });            
+        }
+    };
+    return recurringTasks;      
+};
+
+// Function to get the next weekday - for weekly recurrence
+function getNextWeekday(currentDate, targetDayIndex){
+    let dayOfWeek = currentDate.getDay();
+    const diff = (targetDayIndex - dayOfWeek + 7) % 7;
+    
+    const nextDate = new Date(currentDate);
+    nextDate.setDate(currentDate.getDate() + diff);
+
+    return nextDate
+};
+
+
 // Export the functions so other files can use them
 module.exports = {
     getAllTasks,
     addTask,
     deleteTask,
     updateTask,
+    generateRecurringTasks,
 };
