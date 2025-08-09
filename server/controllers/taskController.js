@@ -11,7 +11,19 @@ function addTask(req, res){
         if(!task){
             return res.status(400).json({error: 'Task input is required'});
         } 
-        const newTask = taskService.addTask(task);
+        let newTask;
+
+        if(task.recurrence){
+            const recurringTasks = taskService.generateRecurringTasks(task);
+
+            recurringTasks.forEach((recurringTasks) => {
+                taskService.addTask(recurringTasks);
+            })
+
+            newTask = recurringTasks;
+        } else {
+            newTask = taskService.addTask(task);
+        }
 
         return res.status(201).json(newTask);
     } catch (error) {
