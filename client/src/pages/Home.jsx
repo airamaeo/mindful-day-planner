@@ -56,7 +56,7 @@ export default function Home(){
         try {
             if (editingTask) {
                 const taskId = editingTask.id;
-                const updatedTaskData = { title, date, time, type };
+                const updatedTaskData = { title, date, time, type, recurrence, daysOfWeek };
     
                 await axios.put(`${backendUrl}/${taskId}`, updatedTaskData);
     
@@ -64,7 +64,7 @@ export default function Home(){
                     task.id === taskId ? { ...task, ...updatedTaskData } : task
                 ));
             } else {
-                const taskData = { title, date, time, type };
+                const taskData = { title, date, time, type, recurrence, daysOfWeek };
                 const response = await axios.post(backendUrl,taskData);
                 setTasks([...tasks, response.data]);
             }

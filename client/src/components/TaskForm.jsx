@@ -6,14 +6,11 @@ export default function TaskForm({
     date, setDate,
     time, setTime,
     type, setType,
+    recurrence, setRecurrence, 
+    daysOfWeek, toggleDayOfWeek,
     handleSubmit,
     formRef,
-    formError,
-    recurrence, 
-    setRecurrence, 
-    daysOfWeek, 
-    toggleDayOfWeek
-
+    formError
 }){
 
     return(

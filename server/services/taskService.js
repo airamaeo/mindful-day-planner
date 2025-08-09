@@ -23,12 +23,18 @@ function addTask(task) {
         date: task.date,
         time: task.time,
         type: task.type,
-        recurrence: task.recurrence || null,
+        recurrence: task.recurrence || "none",
         daysOfWeek: task.daysOfWeek || [],
     };
 
     // Add to tasks array
     tasks.push(newTask);
+
+    // Generate extra tasks if it's recurring
+    if(newTask.recurrence !== "none"){
+        const recurrences = generateRecurringTasks(newTask);
+        tasks.push(...recurrences);
+    }
 
     // Return new task
     return newTask;
@@ -63,44 +69,41 @@ function updateTask(id, updatedTask){
 }
 
 // Function to generate recurring tasks/ events
-function generateRecurringTasks(tasks){
-    const recurringTasks = [];
-    const { recurrence, daysOfWeek, date, title, time, type } = task;
-
-    let newDate = new Date(date);
+function generateRecurringTasks(task){
+    const newTasks = [];
+    const startDate = new Date(task.date);
 
     // Generating tasks for daily occurence
-    if(recurrence === 'daily'){
-        for(let i = 1; i <= 30; i++){
-            const taskDate = new Date(newDate);
-            taskDate.setDate(newDate.getDate() + 1);
+    if(task.recurrence === 'daily'){
+        for(let i = 1; i <= 5; i++){
+            const newDate = new Date(startDate);
 
-            recurringTasks.push({
-                title,
-                date: taskDate.toISOString().split('T')[0],
-                time,
-                type,
-                recurrence,
+            newDate.setDate(startDate.getDate() + i);
+
+            newTasks.push({
+                ...task,
+                id: Date.now().toString() + i,
+                date: newDate.toISOString().split('T')[0]
             });
         }
     };
 
     // Generating tasks for weekly occurence
-    if(recurrence === 'weekly'){
-        for(let i = 1; i <= 12; i++){
-            daysOfWeek.forEach((dayIndex) => {
-                const nextDate = getNextWeekday(newDate, dayIndex);
+    if(task.recurrence === 'weekly' && Array.isArray(task.daysOfWeek)){
+        for(let i = 1; i <= 4; i++){
+            task.daysOfWeek.forEach(dayIndex => {
+                const newDate = new Date(startDate);
 
-                recurringTasks.push({
-                    title,
-                    date: nextDate.toISOString().split('T')[0],
-                    time,
-                    type,
-                    recurrence,
-                });
-            });
-            newDate.setDate(newDate.getDate() + 7);
+                newDate.setDate(startDate.getDate() + ((7 * i) + (dayIndex - startDate.getDay())));
+
+                newTasks.push({
+                    ...task,
+                    id: Date.now().toString() + i + dayIndex,
+                    date: newDate.toISOString().split('T')[0]
+                });                
+            })
         }
+        return newTasks;
     };    
 
     // Generating tasks for monthly occurence
