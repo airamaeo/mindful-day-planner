@@ -8,11 +8,44 @@ export default function TaskForm({
     type, setType,
     handleSubmit,
     formRef,
-    formError
+    formError,
+    recurrence, 
+    setRecurrence, 
+    daysOfWeek, 
+    toggleDayOfWeek
+
 }){
 
     return(
         <div className="taskForm-container">
+            <div className="taskForm-recurrence">
+                <label>Recurrence</label>
+                <select value={recurrence} onChange={e => setRecurrence(e.target.value)}>
+                    <option value="none">None</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+            </div>
+
+            {recurrence === "weekly" && (
+                <div>
+                    <label>Select Days of the Week</label>
+                    <div>
+                        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+                            <label key={index}>
+                            <input
+                            type="checkbox"
+                            checked={daysOfWeek.includes(index)}
+                            onChange={() => toggleDayOfWeek(index)}
+                            />
+                            {day}
+                            </label>
+                        ))}
+                    </div>
+                </div>
+            )}
+
             <form onSubmit={handleSubmit} id="addtask-container" className="addtask-container" ref={formRef}>
                 <label>Task:</label>
                 <input 

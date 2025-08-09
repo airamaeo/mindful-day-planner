@@ -22,6 +22,9 @@ export default function Home(){
     const [time, setTime] = useState('');
     const [type, setType] = useState('');
 
+    const [recurrence, setRecurrence] = useState("none");
+    const [daysOfWeek, setDaysOfWeek] = useState([]);
+
     const backendUrl = 'http://localhost:5000/api/tasks';
 
     useEffect(() => {
@@ -71,7 +74,14 @@ export default function Home(){
             setFormError("Something went wrong");
         }
     };
-    
+
+    const toggleDayOfWeek = (index) => {
+        if (daysOfWeek.includes(index)) {
+            setDaysOfWeek(daysOfWeek.filter(day => day !== index));
+        } else {
+            setDaysOfWeek([...daysOfWeek, index]);
+        }
+    }
 
     const handleDelete = async (taskId) => {
         try {
@@ -166,6 +176,10 @@ export default function Home(){
                         setTime={setTime}
                         type={type}
                         setType={setType}
+                        recurrence={recurrence}
+                        setRecurrence={setRecurrence}
+                        daysOfWeek={daysOfWeek}
+                        toggleDayOfWeek={toggleDayOfWeek}
                         handleSubmit={handleSubmit}
                         formRef={formRef}
                         formError={formError}
