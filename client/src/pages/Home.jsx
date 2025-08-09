@@ -58,17 +58,19 @@ export default function Home(){
                 const taskId = editingTask.id;
                 const updatedTaskData = { title, date, time, type, recurrence, daysOfWeek };
     
-                await axios.put(`${backendUrl}/${taskId}`, updatedTaskData);
+                const res = await axios.put(`${backendUrl}/${taskId}`, updatedTaskData);
     
-                setTasks(tasks.map(task =>
-                    task.id === taskId ? { ...task, ...updatedTaskData } : task
-                ));
+                const updatedFromServer = res.data;
+
+                setTasks(prev => prev.map(t => t.id === updatedFromServer.id ? updatedFromServer : t));
             } else {
                 const taskData = { title, date, time, type, recurrence, daysOfWeek };
-                const response = await axios.post(backendUrl,taskData);
-                setTasks([...tasks, response.data]);
+                const response = await axios.post(backendUrl, taskData);
+                const payload = response.data;
+
+                const newItems = Array.isArray(payload) ? payload : [payload];
+                setTasks(prev => [...prev, ...newItems]);
             }
-            resetForm();
         } catch (err) {
             console.error(err);
             setFormError("Something went wrong");
@@ -139,6 +141,8 @@ export default function Home(){
         setDate('');
         setTime('');
         setType('');
+        setRecurrence("none");
+        setDaysOfWeek([]);
         setFormError('');
         setEditingTask(null);
         setShowForm(false);

@@ -6,29 +6,28 @@ const taskService = require('../services/taskService');
 function addTask(req, res){
     try {
         const task = req.body;
-        console.log(task);
-        
-        if(!task){
-            return res.status(400).json({error: 'Task input is required'});
-        } 
-        let newTask;
-
-        if(task.recurrence){
-            const recurringTasks = taskService.generateRecurringTasks(task);
-
-            recurringTasks.forEach((recurringTasks) => {
-                taskService.addTask(recurringTasks);
-            })
-
-            newTask = recurringTasks;
-        } else {
-            newTask = taskService.addTask(task);
+        if (!task) {
+            return res.status(400).json({ error: 'Task input is required' });
         }
 
-        return res.status(201).json(newTask);
+        // Add the base task
+        const created = taskService.addTask(task);
+        const createdItems = [created];
+
+        // If recurrence specified, generate and add occurrences
+        if (task.recurrence && task.recurrence !== 'none') {
+            const occurrences = taskService.generateRecurringTasks(task);
+            occurrences.forEach((occ) => {
+            taskService.addTask(occ); // each occurrence has recurrence: 'none'
+            });
+            createdItems.push(...occurrences);
+        }
+
+        // Return either single object or array (client handles both)
+        return res.status(201).json(createdItems.length === 1 ? createdItems[0] : createdItems);
     } catch (error) {
-        console.error('Error in adding task:', error.message);
-        res.status(500).json({error: 'Failed to add task'});
+        console.error('Error in adding task:', error);
+        return res.status(500).json({ error: error.message || 'Failed to add task' });
     }
 }
 
@@ -60,7 +59,7 @@ function updateTask(req, res){
         return res.status(404).json({ message: result.message });
     }
 
-    return res.status(200).json({ message: result.message });
+    return res.status(200).json({ message: result.updatedTask });
 }
 
 module.exports = {

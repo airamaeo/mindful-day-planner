@@ -18,23 +18,23 @@ function addTask(task) {
 
     // Create new task with a uniquee id 
     const newTask = {
-        id: Date.now().toString(), 
+        id: `${Date.now().toString()}-${Math.random().toString(36).slice(2,6)}`, 
         title: task.title,
         date: task.date,
         time: task.time,
         type: task.type,
         recurrence: task.recurrence || "none",
-        daysOfWeek: task.daysOfWeek || [],
+        daysOfWeek: Array.isArray(task.daysOfWeek) ? task.daysOfWeek : [],
     };
 
     // Add to tasks array
     tasks.push(newTask);
 
-    // Generate extra tasks if it's recurring
-    if(newTask.recurrence !== "none"){
-        const recurrences = generateRecurringTasks(newTask);
-        tasks.push(...recurrences);
-    }
+    // // Generate extra tasks if it's recurring
+    // if(newTask.recurrence !== "none"){
+    //     const recurrences = generateRecurringTasks(newTask);
+    //     tasks.push(...recurrences);
+    // }
 
     // Return new task
     return newTask;
@@ -69,60 +69,59 @@ function updateTask(id, updatedTask){
 }
 
 // Function to generate recurring tasks/ events
-function generateRecurringTasks(task){
-    const newTasks = [];
+function generateRecurringTasks(task) {
+    if (!task || !task.date) return [];
+
+    const results = [];
     const startDate = new Date(task.date);
 
-    // Generating tasks for daily occurence
-    if(task.recurrence === 'daily'){
-        for(let i = 1; i <= 5; i++){
-            const newDate = new Date(startDate);
+    const makeOccurrence = (dateObj) => ({
+        id: `${Date.now().toString()}-${Math.random().toString(36).slice(2,6)}`,
+        title: task.title,
+        date: dateObj.toISOString().split('T')[0],
+        time: task.time,
+        type: task.type,
+        recurrence: "none",
+        daysOfWeek: [],
+    });
 
-            newDate.setDate(startDate.getDate() + i);
-
-            newTasks.push({
-                ...task,
-                id: Date.now().toString() + i,
-                date: newDate.toISOString().split('T')[0]
-            });
+    // Daily: next 7 days
+    if (task.recurrence === 'daily') {
+        for (let i = 1; i <= 7; i++) {
+        const d = new Date(startDate);
+        d.setDate(startDate.getDate() + i);
+        results.push(makeOccurrence(d));
         }
-    };
+    }
 
-    // Generating tasks for weekly occurence
-    if(task.recurrence === 'weekly' && Array.isArray(task.daysOfWeek)){
-        for(let i = 1; i <= 4; i++){
-            task.daysOfWeek.forEach(dayIndex => {
-                const newDate = new Date(startDate);
+    // Weekly: next 12 weeks for specified daysOfWeek
+    if (task.recurrence === 'weekly' && Array.isArray(task.daysOfWeek) && task.daysOfWeek.length) {
+        for (let w = 0; w < 12; w++) {
+        const weekBase = new Date(startDate);
+        weekBase.setDate(startDate.getDate() + w * 7);
 
-                newDate.setDate(startDate.getDate() + ((7 * i) + (dayIndex - startDate.getDay())));
-
-                newTasks.push({
-                    ...task,
-                    id: Date.now().toString() + i + dayIndex,
-                    date: newDate.toISOString().split('T')[0]
-                });                
-            })
+        task.daysOfWeek.forEach((dayIndex) => {
+            const occ = new Date(weekBase);
+            // move to the requested weekday within this week
+            const diff = (dayIndex - occ.getDay() + 7) % 7;
+            occ.setDate(occ.getDate() + diff);
+            // only include occurrences after the original date
+            if (occ > startDate) results.push(makeOccurrence(occ));
+        });
         }
-        return newTasks;
-    };    
+    }
 
-    // Generating tasks for monthly occurence
-    if(recurrence === 'monthly'){
-        for(let i = 1; i <= 12; i++){
-            const taskDate = new Date(newDate);
-            taskDate.setMonth(newDate.getMonth() + i);
-            
-            recurringTasks.push({
-                title,
-                date: taskDate.toISOString().split('T')[0],
-                time,
-                type,
-                recurrence,
-            });            
+    // Monthly: next 6 months, same day-of-month (fallback behavior will adjust for short months)
+    if (task.recurrence === 'monthly') {
+        for (let m = 1; m <= 6; m++) {
+        const d = new Date(startDate);
+        d.setMonth(startDate.getMonth() + m);
+        results.push(makeOccurrence(d));
         }
-    };
-    return recurringTasks;      
-};
+    }
+
+    return results;
+}
 
 // Function to get the next weekday - for weekly recurrence
 function getNextWeekday(currentDate, targetDayIndex){
