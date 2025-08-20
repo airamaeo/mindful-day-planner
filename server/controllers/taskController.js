@@ -59,7 +59,7 @@ function updateTask(req, res){
         return res.status(404).json({ message: result.message });
     }
 
-    return res.status(200).json({ message: result.updatedTask });
+    return res.status(200).json(result.updatedTask );
 }
 
 module.exports = {

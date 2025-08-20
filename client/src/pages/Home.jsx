@@ -55,10 +55,12 @@ export default function Home(){
     
         try {
             if (editingTask) {
+                console.log("Updating task ID:", editingTask.id);
                 const taskId = editingTask.id;
                 const updatedTaskData = { title, date, time, type, recurrence, daysOfWeek };
     
                 const res = await axios.put(`${backendUrl}/${taskId}`, updatedTaskData);
+                console.log("Update response:", res.data);
     
                 const updatedFromServer = res.data;
 

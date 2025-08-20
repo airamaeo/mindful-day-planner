@@ -54,6 +54,9 @@ function deleteTask(taskId) {
 
 // Function to edit an existing task
 function updateTask(id, updatedTask){
+    console.log("Tasks currently stored:", tasks.map(t => t.id));
+    console.log("Looking for ID:", id);
+    
     const index = tasks.findIndex(task => task.id === id);
 
     if(index === -1) {
@@ -65,7 +68,7 @@ function updateTask(id, updatedTask){
         ...updatedTask
     }
     
-    return {success: true, message: "Task updated successfully"};
+    return {success: true, updatedTask: tasks[index]};
 }
 
 // Function to generate recurring tasks/ events
@@ -142,4 +145,5 @@ module.exports = {
     deleteTask,
     updateTask,
     generateRecurringTasks,
+    getNextWeekday,
 };
